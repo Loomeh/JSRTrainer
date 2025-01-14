@@ -13,49 +13,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@v1.0.2
-
-    - name: Set up Visual Studio 2022
-      uses: microsoft/setup-vs@v1
-      with:
-        vs-version: 2022
+    - name: Initialize MSBuild Path
+      run: |
+        echo "Adding MSBuild to PATH"
+        echo "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin" >> $GITHUB_PATH
 
     - name: Build solution
-      run: msbuild JSRTrainer.sln /p:Configuration=Release /p:Platform=x86 /p:LanguageStandard=stdcpp20
-
-    - name: Archive build output
-      uses: actions/upload-artifact@v3
-      with:
-        name: JSRTrainer
-        path: |
-          **/Release/JSRTrainer.exe
+      run: |
+        msbuild JSRTrainer.sln /p:Configuration=Release /p:Platform=x86 /p:LanguageStandard=stdcpp20
 
     - name: Upload Release Asset
-      uses: actions/github-script@v6
+      uses: actions/upload-release-asset@v1
       with:
-        script: |
-          const fs = require('fs');
-          const path = require('path');
-          const owner = context.repo.owner;
-          const repo = context.repo.repo;
-          const release_id = context.payload.release.id;
-          const filePath = './JSRTrainer.exe';
-          const fileName = 'JSRTrainer.exe';
-          const stats = fs.statSync(filePath);
-          const fileSizeInBytes = stats.size;
-          const fileStream = fs.createReadStream(filePath);
-
-          await github.rest.repos.uploadReleaseAsset({
-            owner,
-            repo,
-            release_id,
-            name: fileName,
-            data: fileStream,
-            headers: {
-              'content-type': 'application/octet-stream',
-              'content-length': fileSizeInBytes,
-            },
-          });
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./JSRTrainer/Release/JSRTrainer.exe
+        asset_name: JSRTrainer.exe
+        asset_content_type: application/octet-stream
