@@ -1,14 +1,12 @@
-name: Build
+name: Build and Release
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  release:
+    types: [published]
 
 jobs:
   build:
-    name: Build Project
+    name: Build and Attach Binary
     runs-on: windows-latest
 
     steps:
@@ -25,3 +23,39 @@ jobs:
 
     - name: Build solution
       run: msbuild JSRTrainer.sln /p:Configuration=Release /p:Platform=x86 /p:LanguageStandard=stdcpp20
+
+    - name: Archive build output
+      uses: actions/upload-artifact@v3
+      with:
+        name: JSRTrainer
+        path: |
+          **/Release/JSRTrainer.exe
+
+    - name: Upload Release Asset
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+          const release_id = context.payload.release.id;
+          const filePath = './JSRTrainer.exe';
+          const fileName = 'JSRTrainer.exe';
+          const stats = fs.statSync(filePath);
+          const fileSizeInBytes = stats.size;
+          const fileStream = fs.createReadStream(filePath);
+
+          await github.rest.repos.uploadReleaseAsset({
+            owner,
+            repo,
+            release_id,
+            name: fileName,
+            data: fileStream,
+            headers: {
+              'content-type': 'application/octet-stream',
+              'content-length': fileSizeInBytes,
+            },
+          });
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
