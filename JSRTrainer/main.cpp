@@ -54,8 +54,8 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
                 break;
             case '4':
                 //std::cout << "Failing Level..." << std::endl;
-		FailLevel();
-		break;
+                FailLevel();
+                break;
             }
         }
     }
@@ -137,20 +137,20 @@ void PauseTimer() {
     if (pMemory != nullptr) { // Explicitly check against nullptr
         uintptr_t localBaseAddr = baseAddr;
         uintptr_t timerInstAddr = localBaseAddr + 0x000B406B;
-		BYTE pauseInstruction[2] = { 0x0F, 0x85 }; 
-		BYTE unpauseInstruction[2] = { 0x0F, 0x84 };
+        BYTE pauseInstruction[2] = { 0x0F, 0x85 };
+        BYTE unpauseInstruction[2] = { 0x0F, 0x84 };
 
         if (timerPaused.load())
         {
             std::cout << "Unpausing timer..." << std::endl;
-			pMemory->modifyInstruction(*pMemory, timerInstAddr, unpauseInstruction, sizeof(unpauseInstruction));
-			timerPaused.store(false);
+            pMemory->modifyInstruction(*pMemory, timerInstAddr, unpauseInstruction, sizeof(unpauseInstruction));
+            timerPaused.store(false);
         }
         else
         {
-			std::cout << "Pausing timer..." << std::endl;
-			pMemory->modifyInstruction(*pMemory, timerInstAddr, pauseInstruction, sizeof(pauseInstruction));
-			timerPaused.store(true);
+            std::cout << "Pausing timer..." << std::endl;
+            pMemory->modifyInstruction(*pMemory, timerInstAddr, pauseInstruction, sizeof(pauseInstruction));
+            timerPaused.store(true);
         }
     }
 }
@@ -218,32 +218,32 @@ void FailLevel()
     {
         uintptr_t localBaseAddr = baseAddr;
         std::thread([localBaseAddr](Memory* pMemory)
-        {
-            uintptr_t failAddr = localBaseAddr + 0x000B40AB;
-            uintptr_t timerInstAddr = localBaseAddr + 0x000B406B;
-
-            BYTE failInstruction[2] = { 0x74, 0x6E };
-			BYTE restoreInstruction[2] = { 0x75, 0x6E };
-            BYTE timerUnpauseInstruction[2] = { 0x0F, 0x84 };
-
-            if (timerPaused.load())
             {
-                std::cout << "Unpausing timer before failing level..." << std::endl;
-                pMemory->modifyInstruction(*pMemory, timerInstAddr, timerUnpauseInstruction, sizeof(timerUnpauseInstruction));
-                timerPaused.store(false);
-            }
+                uintptr_t failAddr = localBaseAddr + 0x000B40AB;
+                uintptr_t timerInstAddr = localBaseAddr + 0x000B406B;
 
-            std::cout << "Failing level..." << std::endl;
+                BYTE failInstruction[2] = { 0x74, 0x6E };
+                BYTE restoreInstruction[2] = { 0x75, 0x6E };
+                BYTE timerUnpauseInstruction[2] = { 0x0F, 0x84 };
 
-			pMemory->modifyInstruction(*pMemory, failAddr, failInstruction, sizeof(failInstruction));
-			std::cout << "Modified instruction to je at: 0x" << std::hex << failAddr << std::dec << std::endl;
+                if (timerPaused.load())
+                {
+                    std::cout << "Unpausing timer before failing level..." << std::endl;
+                    pMemory->modifyInstruction(*pMemory, timerInstAddr, timerUnpauseInstruction, sizeof(timerUnpauseInstruction));
+                    timerPaused.store(false);
+                }
 
-			Sleep(500); // Wait for the instruction to take effect
+                std::cout << "Failing level..." << std::endl;
 
-			pMemory->modifyInstruction(*pMemory, failAddr, restoreInstruction, sizeof(restoreInstruction));
-			std::cout << "Restored instruction to jne at: 0x" << std::hex << failAddr << std::dec << std::endl;
+                pMemory->modifyInstruction(*pMemory, failAddr, failInstruction, sizeof(failInstruction));
+                std::cout << "Modified instruction to je at: 0x" << std::hex << failAddr << std::dec << std::endl;
 
-		}, pMemory).detach();
+                Sleep(500); // Wait for the instruction to take effect
+
+                pMemory->modifyInstruction(*pMemory, failAddr, restoreInstruction, sizeof(restoreInstruction));
+                std::cout << "Restored instruction to jne at: 0x" << std::hex << failAddr << std::dec << std::endl;
+
+            }, pMemory).detach();
     }
 }
 
