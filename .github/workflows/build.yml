@@ -24,4 +24,4 @@ jobs:
         vs-version: 2022
 
     - name: Build solution
-      run: msbuild JSRTrainer.sln /p:Configuration=Release /p:Platform=x64 /p:LanguageStandard=stdcpp20
+      run: msbuild JSRTrainer.sln /p:Configuration=Release /p:Platform=x86 /p:LanguageStandard=stdcpp20
