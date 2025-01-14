@@ -14,18 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{162C9B63-9F4F-4540-8A55-8A6BB075AE2B}.Debug|x64.ActiveCfg = Debug|x64
-		{162C9B63-9F4F-4540-8A55-8A6BB075AE2B}.Debug|x64.Build.0 = Debug|x64
 		{162C9B63-9F4F-4540-8A55-8A6BB075AE2B}.Debug|x86.ActiveCfg = Debug|Win32
 		{162C9B63-9F4F-4540-8A55-8A6BB075AE2B}.Debug|x86.Build.0 = Debug|Win32
-		{162C9B63-9F4F-4540-8A55-8A6BB075AE2B}.Release|x64.ActiveCfg = Release|x64
-		{162C9B63-9F4F-4540-8A55-8A6BB075AE2B}.Release|x64.Build.0 = Release|x64
 		{162C9B63-9F4F-4540-8A55-8A6BB075AE2B}.Release|x86.ActiveCfg = Release|Win32
 		{162C9B63-9F4F-4540-8A55-8A6BB075AE2B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
