@@ -13,10 +13,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Initialize MSBuild Path
-      run: |
-        echo "Adding MSBuild to PATH"
-        echo "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin" >> $GITHUB_PATH
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
 
     - name: Build solution
       run: |
