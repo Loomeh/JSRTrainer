@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build Project
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Set up Visual Studio 2022
+      uses: microsoft/setup-vs@v1
+      with:
+        vs-version: 2022
+
+    - name: Build solution
+      run: msbuild JSRTrainer.sln /p:Configuration=Release /p:Platform=x64 /p:LanguageStandard=stdcpp20
