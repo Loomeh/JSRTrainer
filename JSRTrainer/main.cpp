@@ -53,9 +53,9 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
                 SkipLevel();
                 break;
             case '4':
-				//std::cout << "Failing Level..." << std::endl;
-				FailLevel();
-				break;
+                //std::cout << "Failing Level..." << std::endl;
+			    FailLevel();
+			    break;
             }
         }
     }
