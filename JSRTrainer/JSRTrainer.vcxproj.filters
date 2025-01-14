@@ -18,9 +18,6 @@
     <ClInclude Include="process.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Downloads\MinHook.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="memory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

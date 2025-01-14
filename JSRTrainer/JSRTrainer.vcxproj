@@ -142,7 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Downloads\MinHook.h" />
     <ClInclude Include="memory.hpp" />
     <ClInclude Include="process.hpp" />
   </ItemGroup>
